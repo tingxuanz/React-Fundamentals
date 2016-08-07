@@ -1,4 +1,5 @@
 var axios = require('axios');
+var customLogException = require('./customLogException')
 
 var id = "YOUR_CLIENT_ID";
 var sec = "YOUR_SECRET_ID";
@@ -46,14 +47,14 @@ var helpers = {
         return user.data
       })
     })
-    .catch(function (err) {console.warn('Error in getPlayersInfo: ', err)})
+    .catch((error) => customLogException(error.statusText, {players: players, error: error}))
   },
   battle: function (players) {
     var playerOneData = getPlayersData(players[0]);
     var playerTwoData = getPlayersData(players[1]);
     return axios.all([playerOneData, playerTwoData])
       .then(calculateScores)
-      .catch(function (err) {console.warn('Error in getPlayersInfo: ', err)})
+      .catch((error) => customLogException(error.statusText, {players: players, error: error}))
   }
 };
 
